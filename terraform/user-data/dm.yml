@@ -1,0 +1,73 @@
+#cloud-config
+users:
+  - name: csgoserver
+    sudo: 'ALL=(ALL) NOPASSWD:ALL'
+    ssh_authorized_keys:
+      - _SSH_KEY_
+
+disable_root: true
+package_update: true
+
+packages:
+  - wget
+  - tar
+  - ansible
+
+write_files:
+-   path: /etc/default/linuxgsm
+    owner: csgoserver:csgoserver
+    content: |
+      server_name: 128tick DM FFA MIRAGE
+      tags: 128-tick,deathmatch,dm,ffa,mirage
+
+      gslt: _GSLT_
+      rcon_passwd: _PASSWD_
+
+      cheats: 0
+      map_group: de_mirage
+      default_map: de_mirage
+      maxplayers: 12
+      tickrate: 128
+
+      host_info: 2
+      players_info: 2
+
+      dm_headshot_only: 1
+      dm_ap_messages: 1
+      dm_hp_messages: 1
+      dm_welcomemsg: 1
+      dm_valve_deathmatch: 0
+      dm_free_for_all: 1
+      dm_hide_radar: 1
+      dm_display_panel: 0
+      dm_display_panel_damage: 1
+      dm_sounds_bodyshots: 1
+      dm_sounds_headshots: 1
+      dm_remove_objectives: 1
+      dm_respawning: 1
+      dm_respawn_time: 0.1
+      dm_gun_menu_mode: 1
+      dm_los_spawning: 1
+      dm_los_attempts: 8
+      dm_spawn_distance: 0
+      dm_spawn_protection_time: 0
+      dm_loadout_style: 2
+      dm_fast_equip: 1
+      dm_no_knife_damage: 1
+      dm_remove_weapons: 1
+      dm_replenish_ammo_empty: 1
+      dm_replenish_ammo_reload: 0
+      dm_replenish_ammo_kill: 1
+      dm_replenish_ammo_type: 3
+      dm_replenish_grenade: 0
+      dm_replenish_hegrenade: 0
+      dm_replenish_grenade_kill: 0
+      dm_hp_kill: 9
+      dm_hp_headshot: 25
+      dm_ap_kill: 7
+      dm_ap_headshot: 13
+      dm_armor_full: 1
+      dm_armor: 1
+
+runcmd: 
+  - su -l csgoserver -c 'ansible-pull -U https://github.com/leorog/setup-dedicated-server.git dm.yml -i 127.0.0.1,'

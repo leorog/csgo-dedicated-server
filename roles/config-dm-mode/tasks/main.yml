@@ -1,0 +1,28 @@
+- name: read env from from /etc/default/linuxgsm
+  include_vars:
+    file: /etc/default/linuxgsm
+    name: env
+
+- name: download dm mode
+  git:
+    version: development
+    repo: "https://github.com/Maxximou5/csgo-deathmatch.git"
+    dest: /tmp/csgo-deathmatch
+
+- name: install dm mode
+  synchronize:
+    src: "/tmp/csgo-deathmatch/{{ item }}"
+    dest: ~/serverfiles/csgo/addons/sourcemod/
+  delegate_to: localhost
+  with_items:
+    - configs
+    - translations
+    - plugins
+    - scripting
+
+- name: configure dm mode
+  template:
+    src: dm.cfg.j2
+    dest: ~/serverfiles/csgo/cfg/csgoserver.cfg
+  notify: restart_server
+  

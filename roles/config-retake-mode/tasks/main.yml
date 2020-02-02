@@ -1,0 +1,29 @@
+- name: read env from from /etc/default/linuxgsm
+  include_vars:
+    file: /etc/default/linuxgsm
+    name: env
+
+- name: install retake mode
+  unarchive:
+    src: "https://github.com/splewis/csgo-retakes/releases/download/v0.3.4/retakes_0.3.4.zip"
+    remote_src: true
+    dest: ~/serverfiles/csgo
+
+- name: configure retake mode
+  template:
+    src: retake.cfg.j2
+    dest: ~/serverfiles/csgo/cfg/csgoserver.cfg
+
+- name: retake pistol only
+  when: pistol_only
+  copy:
+    src: ~/serverfiles/csgo/addons/sourcemod/plugins/disabled/retakes_pistolallocator.smx
+    dest: ~/serverfiles/csgo/addons/sourcemod/plugins/retakes_allocator.smx
+  notify: restart_server
+
+- name: retake standard
+  when: not pistol_only
+  copy:
+    src: ~/serverfiles/csgo/addons/sourcemod/plugins/disabled/retakes_standardallocator.smx
+    dest: ~/serverfiles/csgo/addons/sourcemod/plugins/retakes_allocator.smx
+  notify: restart_server

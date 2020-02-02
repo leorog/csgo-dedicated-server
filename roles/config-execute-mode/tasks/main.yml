@@ -1,0 +1,10 @@
+- name: install executes mode
+  unarchive:
+    src: "https://ci.splewis.net/job/csgo-executes/lastSuccessfulBuild/artifact/builds/executes-release/executes-44.zip"
+    remote_src: true
+    dest: ~/serverfiles/csgo
+
+- name: configure executes mode
+  template:
+    src: execute.cfg.j2
+    dest: ~/serverfiles/csgo/cfg/csgoserver.cfg

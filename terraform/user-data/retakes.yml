@@ -1,0 +1,40 @@
+#cloud-config
+users:
+  - name: csgoserver
+    sudo: 'ALL=(ALL) NOPASSWD:ALL'
+    ssh_authorized_keys:
+      - _SSH_KEY_
+
+disable_root: true
+package_update: true
+
+packages:
+  - wget
+  - tar
+  - ansible
+
+write_files:
+-   path: /etc/default/linuxgsm
+    owner: csgoserver:csgoserver
+    content: |
+      server_name: 128tick RETAKES MIRAGE
+      tags: 128-tick,retakes,mirage
+
+      gslt: _GSLT_
+      rcon_passwd: _PASSWD_
+
+      cheats: 0
+      map_group: de_mirage
+      default_map: de_mirage
+      maxplayers: 12
+      tickrate: 128
+
+      host_info: 2
+      players_info: 2
+
+      sm_retakes_scramble_rounds 5
+      sm_retakes_round_time 20
+      sm_retakes_random_teams 1
+
+runcmd: 
+  - su -l csgoserver -c 'ansible-pull -U https://github.com/leorog/setup-dedicated-server.git retakes.yml -i 127.0.0.1,'

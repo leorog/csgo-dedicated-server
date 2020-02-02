@@ -1,0 +1,5 @@
+- hosts: all
+  roles:
+    - install-gameserver
+    - install-netdata
+    - config-execute-mode
